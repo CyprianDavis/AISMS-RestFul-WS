@@ -1,12 +1,9 @@
 package com.davis.model;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,8 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 
 /**
@@ -26,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * This class is used to store and manage information about product categories, including their ID, name,
  * description, creation date, and associated products.
  * 
- * The category ID is automatically generated upon initialization using a unique sequence number.
- * The creation date is also set during initialization.
  * 
  * This class is annotated with JPA annotations to map it to a database table and define relationships
  * with other entities such as `Product`.
@@ -38,12 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="ProductCategory.getCategories", query="SELECT p FROM ProductCategory p"),
+    @NamedQuery(name = "ProductCategory.getCategories", query="SELECT p FROM ProductCategory p")
     
 })
 public class ProductCategory {
-    @Autowired
-    private IdGeneration idGeneration;
+   
 
     @Id
     @Column(name="CategoryId")
@@ -61,42 +53,6 @@ public class ProductCategory {
     // One-to-many relationship with Product
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
-
-    /**
-     * Initializes the category ID and creation date after the bean is constructed.
-     * This method is automatically called by Spring after the bean is instantiated.
-     */
-    @PostConstruct
-    public void initializeCustomerId() {
-        // Generate the category ID before the bean is fully initialized
-        long auto_id = idGeneration.getNextIdNumber("productCategory");
-        this.id = generateProductId(auto_id);
-
-        // Set date of creation
-        LocalDateTime now = LocalDateTime.now();
-        this.createdOn = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    /**
-     * Generates a unique category ID based on the provided ID.
-     * 
-     * @param id The unique sequence number for the category.
-     * @return A formatted category ID string.
-     */
-    private String generateProductId(long id) {
-        // Handle case where auto_id is less than 10
-        if (id <= 9) {
-            return "CAT00" + id;
-        }
-        // Handle case where auto_id is greater than or equal to 10 and less than 100
-        else if (id >= 10 && id < 100) {
-            return "CAT0" + id;
-        }
-        // Handle case where auto_id is greater than or equal to 100
-        else {
-            return "CATO" + id;
-        }
-    }
 
     /**
      * Default constructor required by JPA.

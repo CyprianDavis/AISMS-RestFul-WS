@@ -36,8 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="Product.getProducts", query="SELECT p FROM Product p"),
-    @NamedQuery(name="Product.getProduct",query="SELECT p FROM Product WHERE p.productSKU=:sku")
+    @NamedQuery(name = "Product.getProducts", query = "SELECT p FROM Product p")
    
 })
 public class Product {

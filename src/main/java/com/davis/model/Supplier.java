@@ -1,13 +1,9 @@
 package com.davis.model;
 
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -21,8 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 /**
  * Represents a supplier entity in the system.
@@ -33,12 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Entity
 @NamedQueries({
-  @NamedQuery(name="Supplier.findAll",query="SELECT s FROM Supplier s")
+  @NamedQuery(name = "Supplier.findAll",query = "SELECT s FROM Supplier s")
 })
 public class Supplier {
-    @Autowired
-    private IdGeneration idGeneration; // Utility for generating unique IDs
-
+   
     @Id
     private String supplierId; // Unique identifier for the supplier
 
@@ -70,46 +62,6 @@ public class Supplier {
 
     @OneToMany(targetEntity = Product.class, mappedBy = "supplier", fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>(); // Set of products supplied by this supplier
-
-  
-    /**
-     * Initializes the supplier entity after construction.
-     * Generates a unique supplier ID, sets the creation timestamp, and initializes the status to "ACTIVE".
-     */
-    @PostConstruct
-    public void initializeSupplierId() {
-        // Generate the supplier ID before the bean is fully initialized
-        int year = Year.now().getValue();
-        long auto_id = idGeneration.getNextIdNumber("supplier");
-        this.supplierId = generateSupplierId(auto_id, year);
-
-        // Set date of creation
-        LocalDateTime now = LocalDateTime.now();
-        this.createdOn = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
-
-        // Set status
-        this.status = "ACTIVE";
-    }
-
-    /**
-     * Generates a unique supplier ID based on the given ID and year.
-     *
-     * @param id   The auto-generated ID number.
-     * @param year The current year.
-     * @return A formatted supplier ID (e.g., SU00012023).
-     */
-    private String generateSupplierId(long id, int year) {
-        if (id <= 9) {
-            return "SU000" + id + "" + year;
-        } else if (id >= 10 && id <= 99) {
-            return "SU00" + id + "" + year;
-        } else if (id >= 100 && id <= 999) {
-            return "SU0" + id + "" + year;
-        } else {
-            return "SU" + id + "" + year;
-        }
-    }
-
     /**
      * Default constructor.
      */

@@ -1,9 +1,13 @@
 package com.davis.service;
 
+import java.time.Year;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.davis.dao.SupplierDao;
+import com.davis.model.IdGeneration;
+import com.davis.model.Status;
 import com.davis.model.Supplier;
 
 /**
@@ -15,9 +19,12 @@ import com.davis.model.Supplier;
  */
 @Service
 public class SupplierService {
+	@Autowired
+    private IdGeneration idGeneration;
 
     @Autowired
     private SupplierDao supplierDao;
+    
 
     /**
      * Adds a new supplier to the system.
@@ -26,7 +33,24 @@ public class SupplierService {
      * @return The added supplier.
      */
     public Supplier addSupllier(Supplier supplier) {
+    	 int year = Year.now().getValue();
+         long auto_id = idGeneration.getNextIdNumber("supplier");
+         supplier.setSupplierId(generateSupplierId(auto_id, year));
+
+         supplier.setCreatedOn(new Date());
+         supplier.setStatus(Status.ACTIVE.toString().toUpperCase());
         return supplierDao.addSupplier(supplier);
+    }
+    private String generateSupplierId(long id, int year) {
+        if (id <= 9) {
+            return "SU000" + id + "" + year;
+        } else if (id >= 10 && id <= 99) {
+            return "SU00" + id + "" + year;
+        } else if (id >= 100 && id <= 999) {
+            return "SU0" + id + "" + year;
+        } else {
+            return "SU" + id + "" + year;
+        }
     }
 
     /**

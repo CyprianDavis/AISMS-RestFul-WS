@@ -2,8 +2,9 @@ package com.davis.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,18 +13,18 @@ import com.davis.model.Supplier;
 @Repository
 @Transactional
 public class SupplierDao {
-	@Autowired
-	private SessionFactory sessionFactory;
-
+	@PersistenceContext
+	private EntityManager entityManager;
 	public Supplier addSupplier(Supplier supplier) {
-		sessionFactory.getCurrentSession().persist(supplier);
+		entityManager.persist(supplier);
 		return supplier;
 	}
+	@Transactional(readOnly=true)
 	public List<Supplier> getSupplies(){
-		return sessionFactory.getCurrentSession().createNamedQuery("Supplier.findAll",Supplier.class)
+		return entityManager.createNamedQuery("Supplier.findAll",Supplier.class)
 		.getResultList();
 	}
 	public Supplier getSupplier(String id) {
-		return sessionFactory.getCurrentSession().find(Supplier.class, id);
+		return entityManager.find(Supplier.class, id);
 	}
 }

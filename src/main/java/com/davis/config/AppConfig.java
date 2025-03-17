@@ -1,21 +1,17 @@
 package com.davis.config;
 
 import java.util.Properties;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
-/**
- * Configuration class for setting up the Spring application context.
- * This class configures the data source, Hibernate session factory,
- * and transaction management for the application.
- * @author CYPRIAN DAVIS
- */
 @Configuration // Indicates that this class contains Spring configuration definitions.
 @EnableTransactionManagement // Enables Spring's annotation-driven transaction management.
 @ComponentScan(basePackages = "com.davis") // Scans the specified package for Spring components (e.g., @Service, @Repository).
@@ -37,22 +33,29 @@ public class AppConfig {
     }
 
     /**
-     * Creates and configures a LocalSessionFactoryBean for Hibernate.
-     * This bean is responsible for creating Hibernate SessionFactory instances.
+     * Creates and configures a LocalContainerEntityManagerFactoryBean for JPA.
+     * This bean is responsible for creating JPA EntityManagerFactory instances.
      * 
-     * @return LocalSessionFactoryBean - The configured session factory bean.
+     * @return LocalContainerEntityManagerFactoryBean - The configured entity manager factory bean.
      */
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean(); // Creates a session factory bean.
-        sessionFactory.setDataSource(dataSource()); // Sets the data source for the session factory.
-        sessionFactory.setPackagesToScan("com.data.model"); // Specifies the package to scan for entity classes.
-        sessionFactory.setHibernateProperties(hibernateProperties()); // Sets Hibernate-specific properties.
-        return sessionFactory; // Returns the configured session factory bean.
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource()); // Sets the data source for the entity manager.
+        em.setPackagesToScan("com.davis.model"); // Specifies the package to scan for JPA entity classes.
+
+        // Use Hibernate as the JPA vendor adapter
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+
+        // Set Hibernate-specific properties
+        em.setJpaProperties(hibernateProperties());
+
+        return em; // Returns the configured entity manager factory bean.
     }
 
     /**
-     * Configures Hibernate-specific properties.
+     * Configures Hibernate-specific properties for JPA.
      * 
      * @return Properties - A Properties object containing Hibernate settings.
      */
@@ -61,17 +64,20 @@ public class AppConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect"); // Sets the SQL Server dialect.
         properties.setProperty("hibernate.show_sql", "true"); // Enables logging of SQL statements.
         properties.setProperty("hibernate.format_sql", "true"); // Formats SQL statements for better readability.
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // Automatically updates the database schema.
         return properties; // Returns the configured properties.
     }
 
     /**
-     * Creates and configures a HibernateTransactionManager bean.
-     * This bean manages Hibernate transactions.
+     * Creates and configures a JpaTransactionManager bean.
+     * This bean manages JPA transactions.
      * 
-     * @return HibernateTransactionManager - The configured transaction manager.
+     * @return JpaTransactionManager - The configured transaction manager.
      */
     @Bean
-    public HibernateTransactionManager transactionManager() {
-        return new HibernateTransactionManager(sessionFactory().getObject()); // Creates and returns a transaction manager.
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory); // Sets the entity manager factory.
+        return transactionManager; // Returns the configured transaction manager.
     }
 }

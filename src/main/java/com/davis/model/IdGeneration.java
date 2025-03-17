@@ -1,8 +1,9 @@
 package com.davis.model;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Component;
 @Component // Marks this class as a Spring component, making it eligible for dependency injection.
 public class IdGeneration {
 
-    @Autowired // Injects the Hibernate SessionFactory bean.
-    private SessionFactory sessionFactory;
+	 @PersistenceContext
+	    private EntityManager entityManager;
 
     /**
      * Retrieves the next ID number for a given sequence name.
@@ -33,7 +34,7 @@ public class IdGeneration {
         try {
             // SQL query to get the current value for the sequence
             String selectSql = "SELECT idValue FROM ID_Gen WHERE idName = :idName";
-            Query selectQuery = sessionFactory.getCurrentSession().createNativeQuery(selectSql);
+            Query selectQuery = entityManager.createNativeQuery(selectSql);
             selectQuery.setParameter("idName", idName); // Sets the sequence name as a parameter.
             currentValue = ((Number) selectQuery.getSingleResult()).intValue(); // Retrieves the current value.
 
@@ -42,7 +43,7 @@ public class IdGeneration {
 
             // SQL query to update the sequence value
             String updateSql = "UPDATE ID_Gen SET idValue = :nextValue WHERE idName = :idName";
-            Query updateQuery = sessionFactory.getCurrentSession().createNativeQuery(updateSql);
+            Query updateQuery = entityManager.createNativeQuery(updateSql);
             updateQuery.setParameter("nextValue", nextValue); // Sets the next value as a parameter.
             updateQuery.setParameter("idName", idName); // Sets the sequence name as a parameter.
 

@@ -2,36 +2,40 @@ package com.davis.dao;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.davis.model.Product;
 import com.davis.model.ProductCategory;
-@Transactional
 @Repository
+@Transactional
 public class ProductDao {
-	@Autowired
-	private SessionFactory sessionFactory;
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	public Product addProduct(Product product) {
-		sessionFactory.getCurrentSession().persist(product);
+		entityManager.persist(product);
 		return product;
 	}
 	@Transactional(readOnly=true)
 	public List<Product> getProducts(){
-		return sessionFactory.getCurrentSession().createNamedQuery("Product.getProducts",Product.class).getResultList();
+		return entityManager.createNamedQuery("Product.getProducts",Product.class).getResultList();
 	}
 	@Transactional(readOnly=true)
 	public Product getProduct(String sku) {
-		return sessionFactory.getCurrentSession().find(Product.class, sku);
+		return entityManager.find(Product.class, sku);
 	}
 	@Transactional(readOnly=true)
 	public List<ProductCategory> getProductCategories(){
-		return sessionFactory.getCurrentSession().createNamedQuery("ProductCategory.getCategories",ProductCategory.class)
+		return entityManager.createNamedQuery("ProductCategory.getCategories",ProductCategory.class)
 		.getResultList();
 	}
-	
+	public ProductCategory addProductCategory(ProductCategory category) {
+		 entityManager.persist(category);
+		 return category;
+	}
 
 }
