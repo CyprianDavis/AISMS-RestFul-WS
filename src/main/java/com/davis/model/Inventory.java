@@ -1,7 +1,5 @@
 package com.davis.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,8 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 
@@ -52,21 +48,21 @@ public class Inventory {
 
     private int incomingQuantity; // Quantity of the product expected to arrive
 
-    @Temporal(TemporalType.DATE)
-    private Date expiryDate; // Expiry date of the product
+   
+    private String expiryDate; // Expiry date of the product
 
     private int reOrderPoint; // Reorder point for the product
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn; // Date when the inventory was created
+   
+    private String createdOn; // Date when the inventory was created
 
     private double totalCost; // Total cost of the inventory
 
     private String status; // Status of the inventory (e.g., ACTIVE, OUT_OF_STOCK)
 
     @Column(name = "LastUpdatedOn")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedOn; // Date when the inventory was last updated
+   
+    private String updatedOn; // Date when the inventory was last updated
     /**
      * Default constructor for the Inventory class.
      */
@@ -153,7 +149,7 @@ public class Inventory {
      *
      * @return The creation date.
      */
-    public Date getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
@@ -162,7 +158,7 @@ public class Inventory {
      *
      * @param createdOn The creation date to set.
      */
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -171,7 +167,7 @@ public class Inventory {
      *
      * @return The last updated date.
      */
-    public Date getUpdatedOn() {
+    public String getUpdatedOn() {
         return updatedOn;
     }
 
@@ -180,7 +176,7 @@ public class Inventory {
      *
      * @param updatedOn The last updated date to set.
      */
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(String updatedOn) {
         this.updatedOn = updatedOn;
     }
 
@@ -243,7 +239,7 @@ public class Inventory {
      *
      * @return The expiry date.
      */
-    public Date getExpiryDate() {
+    public String getExpiryDate() {
         return expiryDate;
     }
 
@@ -252,7 +248,7 @@ public class Inventory {
      *
      * @param expiryDate The expiry date to set.
      */
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
 

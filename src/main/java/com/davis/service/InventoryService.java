@@ -47,7 +47,7 @@ public class InventoryService {
 
         // Set the creation date and status
         LocalDateTime now = LocalDateTime.now();
-        inventory.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()));
+        inventory.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()).toString());
         inventory.setStatus(Status.ACTIVE.toString().toUpperCase());
 
         // Save the inventory item using the DAO

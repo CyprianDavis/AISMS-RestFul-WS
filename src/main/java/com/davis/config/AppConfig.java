@@ -64,7 +64,7 @@ public class AppConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect"); // Sets the SQL Server dialect.
         properties.setProperty("hibernate.show_sql", "true"); // Enables logging of SQL statements.
         properties.setProperty("hibernate.format_sql", "true"); // Formats SQL statements for better readability.
-        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // Automatically updates the database schema.
+        
         return properties; // Returns the configured properties.
     }
 

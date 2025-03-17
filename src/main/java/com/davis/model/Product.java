@@ -1,10 +1,7 @@
 package com.davis.model;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +11,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -40,8 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
    
 })
 public class Product {
-    @Autowired
-    private IdGeneration idGeneration;
+   
 
     @Id
     @Column(name="ProductCode")
@@ -86,116 +80,6 @@ public class Product {
      * Default constructor required by JPA.
      */
     public Product() {}
-
-    /**
-     * Generates a unique SKU (Stock Keeping Unit) for the product based on its attributes:
-     * - First letter of the product name
-     * - First letter of the product category
-     * - Product weight (if available), followed by the first letter of the unit of measurement
-     * - A sequential number to ensure the SKU is unique even for products with the same name/category
-     * 
-     * The SKU follows the format:
-     * [ProductInitial]-[CategoryInitial]-[WeightUnit]-[SequentialNumber]
-     * Example: A-F-1.5kg-001
-     */
-    private void generateSKU() {
-        StringBuilder skuBuilder = new StringBuilder();
-
-        // Step 1: Add the product initial
-        skuBuilder.append(getProductInitial());
-
-        // Step 2: Add the category initial
-        skuBuilder.append(getCategoryInitial());
-
-        // Step 3: Add the weight and unit of measurement (if available)
-        skuBuilder.append(getWeightAndMeasurement());
-
-        // Step 4: Add the sequential number
-        skuBuilder.append(getSequentialNumber());
-
-        // Step 5: Set the generated SKU to the product's productSKU field
-        this.productSKU = skuBuilder.toString();
-    }
-
-    /**
-     * Extracts the first letter of the product name and converts it to uppercase.
-     * 
-     * @return The product initial (e.g., "A" for "Apple").
-     */
-    private String getProductInitial() {
-        if (product != null && !product.isEmpty()) {
-            return product.substring(0, 1).toUpperCase();
-        }
-        return "";
-    }
-
-    /**
-     * Extracts the first letter of the product category name and converts it to uppercase.
-     * 
-     * @return The category initial (e.g., "F" for "Fruits").
-     */
-    private String getCategoryInitial() {
-        if (category != null && category.getName() != null && !category.getName().isEmpty()) {
-            return category.getName().substring(0, 1).toUpperCase();
-        }
-        return "";
-    }
-
-    /**
-     * Constructs the weight and unit of measurement part of the SKU.
-     * 
-     * @return The weight and unit of measurement (e.g., "-1.5kg").
-     */
-    private String getWeightAndMeasurement() {
-        if (productWeight > 0) {
-            StringBuilder weightBuilder = new StringBuilder("-").append(productWeight);
-
-            if (unitOfmeasurement != null && !unitOfmeasurement.isEmpty()) {
-                if (unitOfmeasurement.length() == 1) {
-                    weightBuilder.append(unitOfmeasurement.substring(0, 1));
-                } else {
-                    weightBuilder.append(unitOfmeasurement.substring(0, 2));
-                }
-            }
-            return weightBuilder.toString();
-        }
-        return "";
-    }
-
-    /**
-     * Generates a sequential number for the SKU and pads it to a 3-digit format.
-     * 
-     * @return The sequential number (e.g., "-001").
-     */
-    private String getSequentialNumber() {
-        long skuNumber = idGeneration.getNextIdNumber("skuNumber");
-
-        if (skuNumber <= 9) {
-            return "-" + String.format("%03d", skuNumber);
-        } else if (skuNumber >= 10 && skuNumber <= 99) {
-            return "-" + String.format("%02d", skuNumber);
-        } else if (skuNumber >= 100) {
-            return "-" + String.format("%01d", skuNumber);
-        }
-        return "";
-    }
-
-    /**
-     * Initializes the product SKU, creation date, and status after the bean is constructed.
-     * This method is automatically called by Spring after the bean is instantiated.
-     */
-    @PostConstruct
-    public void initialize() {
-        // Generate SKU after dependency injection
-        generateSKU();
-
-        // Set date of creation
-        LocalDateTime now = LocalDateTime.now();
-        this.createdOn = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
-
-        // Set status
-        this.status = Status.ACTIVE.toString().toUpperCase();
-    }
 
     // Getters and Setters for all fields
 
