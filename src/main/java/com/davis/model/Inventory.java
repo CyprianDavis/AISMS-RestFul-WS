@@ -1,11 +1,7 @@
 package com.davis.model;
 
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.ZoneId;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,8 +11,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 
@@ -32,8 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 })
 public class Inventory {
 
-    @Autowired
-    private IdGeneration idGeneration;
 
     @Id
     @Column(name = "StockId")
@@ -75,54 +67,11 @@ public class Inventory {
     @Column(name = "LastUpdatedOn")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedOn; // Date when the inventory was last updated
-
-    /**
-     * Initializes the inventory by generating a unique inventory ID,
-     * setting the creation date, and setting the default status to "ACTIVE".
-     * This method is automatically called after the bean is constructed.
-     */
-    @PostConstruct
-    public void initializeInventoryId() {
-        // Generate the inventory ID before the bean is fully initialized
-        int year = Year.now().getValue();
-        long auto_id = idGeneration.getNextIdNumber("inventoryId");
-        this.inventoryId = getInventoryId(auto_id, year);
-
-        // Set date of creation
-        LocalDateTime now = LocalDateTime.now();
-        this.createdOn = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
-
-        // Set status
-        this.status = Status.ACTIVE.toString().toUpperCase();
-    }
-
     /**
      * Default constructor for the Inventory class.
      */
     public Inventory() {
     }
-
-    /**
-     * Generates a unique inventory ID based on the given ID and year.
-     *
-     * @param id    The unique ID number.
-     * @param year  The current year.
-     * @return      A formatted inventory ID.
-     */
-    private String getInventoryId(long id, int year) {
-        if (id <= 9) {
-            return "IN0000" + id + "" + year;
-        } else if (id >= 10 && id <= 99) {
-            return "IN000" + id + "" + year;
-        } else if (id >= 100 && id <= 999) {
-            return "IN00" + id + "" + year;
-        } else if (id >= 1000 && id <= 9999) {
-            return "IN0" + id + "" + year;
-        } else {
-            return "IN" + id + "" + year;
-        }
-    }
-
     /**
      * Returns the inventory ID.
      *
