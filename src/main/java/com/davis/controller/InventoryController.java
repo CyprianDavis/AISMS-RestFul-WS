@@ -47,6 +47,7 @@ public class InventoryController {
      * @return The added inventory item.
      * @ResponseBody Indicates that the return value will be serialized directly into the HTTP response body.
      */
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     public Inventory addInventory(@RequestBody Inventory inventory) {

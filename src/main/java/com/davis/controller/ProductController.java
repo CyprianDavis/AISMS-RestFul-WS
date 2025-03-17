@@ -74,6 +74,7 @@ public class ProductController {
      * @return The added product.
      * @ResponseBody Indicates that the return value will be serialized directly into the HTTP response body.
      */
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     public Product addProduct(@RequestBody Product product) {
