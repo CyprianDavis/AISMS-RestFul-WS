@@ -53,7 +53,7 @@ public class Product {
     private String description; // Description of the product
 
     @Column(name="weight")
-    private double productWeight; // Weight of the product (e.g., 1.5 in liters or kilograms)
+    private Double productWeight; // Weight of the product (e.g., 1.5 in liters or kilograms)
 
     
     private String unitOfmeasurement; // Unit of measurement for the product weight
@@ -166,14 +166,14 @@ public class Product {
     /**
      * @return The weight of the product.
      */
-    public double getproductWeight() {
+    public Double getproductWeight() {
         return productWeight;
     }
 
     /**
      * @param weight The weight to set.
      */
-    public void setproductWeight(double weight) {
+    public void setproductWeight(Double weight) {
         this.productWeight = weight;
     }
 

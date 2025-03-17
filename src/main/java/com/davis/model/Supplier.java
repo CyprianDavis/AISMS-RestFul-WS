@@ -1,6 +1,5 @@
 package com.davis.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -51,16 +50,16 @@ public class Supplier {
     })
     private Address address; // Address information of the supplier
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn; // Timestamp when the supplier was created
+    
+    private String createdOn; // Timestamp when the supplier was created
 
     @Column(name = "LastUpdatedOn")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedOn; // Timestamp when the supplier was last updated
+    private String updatedOn; // Timestamp when the supplier was last updated
 
     private String status; // Current status of the supplier (e.g., ACTIVE, INACTIVE)
 
     @OneToMany(targetEntity = Product.class, mappedBy = "supplier", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Product> products = new HashSet<>(); // Set of products supplied by this supplier
     /**
      * Default constructor.
@@ -163,7 +162,7 @@ public class Supplier {
      *
      * @return The creation timestamp.
      */
-    public Date getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
@@ -172,7 +171,7 @@ public class Supplier {
      *
      * @param createdOn The creation timestamp to set.
      */
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -181,7 +180,7 @@ public class Supplier {
      *
      * @return The last updated timestamp.
      */
-    public Date getUpdatedOn() {
+    public String getUpdatedOn() {
         return updatedOn;
     }
 
@@ -190,7 +189,7 @@ public class Supplier {
      *
      * @param updatedOn The last updated timestamp to set.
      */
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(String updatedOn) {
         this.updatedOn = updatedOn;
     }
 

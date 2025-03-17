@@ -1,6 +1,8 @@
 package com.davis.service;
 
+import java.time.LocalDateTime;
 import java.time.Year;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,9 @@ public class SupplierService {
     	 int year = Year.now().getValue();
          long auto_id = idGeneration.getNextIdNumber("supplier");
          supplier.setSupplierId(generateSupplierId(auto_id, year));
-
-         supplier.setCreatedOn(new Date());
+         // Set the creation date
+         LocalDateTime now = LocalDateTime.now();
+         supplier.setCreatedOn((Date.from(now.atZone(ZoneId.systemDefault()).toInstant()).toString()));
          supplier.setStatus(Status.ACTIVE.toString().toUpperCase());
         return supplierDao.addSupplier(supplier);
     }
