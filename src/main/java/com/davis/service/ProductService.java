@@ -65,7 +65,7 @@ public class ProductService {
 
         // Set the creation date
         LocalDateTime now = LocalDateTime.now();
-        category.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()));
+        category.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()).toString());
 
         // Save the category using the DAO
         return productDao.addProductCategory(category);
