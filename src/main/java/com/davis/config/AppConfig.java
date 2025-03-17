@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @Configuration // Indicates that this class contains Spring configuration definitions.
 @EnableTransactionManagement // Enables Spring's annotation-driven transaction management.
-@ComponentScan(basePackages = "com") // Scans the specified package for Spring components (e.g., @Service, @Repository).
+@ComponentScan(basePackages = "com.davis") // Scans the specified package for Spring components (e.g., @Service, @Repository).
 public class AppConfig {
 
     /**

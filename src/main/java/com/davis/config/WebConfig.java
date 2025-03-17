@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration // Indicates that this class contains Spring configuration definitions.
 @EnableWebMvc // Enables Spring MVC and registers default configurations.
-@ComponentScan(basePackages = "com") // Scans the specified package for Spring components (e.g., @Controller, @Service).
+@ComponentScan(basePackages = "com.davis") // Scans the specified package for Spring components (e.g., @Controller, @Service).
 public class WebConfig implements WebMvcConfigurer {
 
     /**
