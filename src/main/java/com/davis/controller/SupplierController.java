@@ -21,7 +21,7 @@ public class SupplierController {
 	@Autowired
 	private SupplierService supplierService;
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value="/supplies", method= RequestMethod.GET)
+	@RequestMapping(value="/", method= RequestMethod.GET)
 	@ResponseBody
 	public List<Supplier> getSupplies(){
 		return supplierService.getSupplies();
