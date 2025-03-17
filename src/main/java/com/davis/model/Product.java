@@ -1,7 +1,5 @@
 package com.davis.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,8 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 /**
@@ -68,12 +64,12 @@ public class Product {
 
     private String status; // Status of the product (e.g., ACTIVE, EXPIRED, DISCONTINUED)
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn; // Date when the product was added
+  
+    private String createdOn; // Date when the product was added
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="lastUpdatedOn")
-    private Date updatedOn; // Date when the product was last updated
+    private String updatedOn; // Date when the product was last updated
 
     
     /**
@@ -240,28 +236,28 @@ public class Product {
     /**
      * @return The date when the product was added.
      */
-    public Date getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
     /**
      * @param createdOn The creation date to set.
      */
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
 
     /**
      * @return The date when the product was last updated.
      */
-    public Date getUpdatedOn() {
+    public String getUpdatedOn() {
         return updatedOn;
     }
 
     /**
      * @param updatedOn The last update date to set.
      */
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(String updatedOn) {
         this.updatedOn = updatedOn;
     }
 }

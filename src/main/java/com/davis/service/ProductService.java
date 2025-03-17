@@ -43,7 +43,7 @@ public class ProductService {
 
         // Set the creation date and status
         LocalDateTime now = LocalDateTime.now();
-        product.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()));
+        product.setCreatedOn(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()).toString());
         product.setStatus(Status.ACTIVE.toString().toUpperCase());
 
         // Save the product using the DAO
